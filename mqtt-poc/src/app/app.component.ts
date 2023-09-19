@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { IMqttMessage, MqttService } from 'ngx-mqtt';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'mqtt-poc';
+  screenColor$: BehaviorSubject<string> = new BehaviorSubject("white");
+
+  constructor(private mqttService: MqttService) {
+    this.mqttService.observe('screencolor').subscribe(message => {
+      this.screenColor$.next(message.payload.toString());
+    });
+  }
 }
